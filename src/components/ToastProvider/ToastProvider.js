@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import useEscapeKey from '../../hooks/useEscapeKey';
 
 export const ToastContext = createContext()
 
@@ -7,6 +8,7 @@ function ToastProvider({
 }) {
 
   const [toasts, setToasts] = useState([])
+  useEscapeKey(() => setToasts([]))
 
   const addToast = (toast) => {
 
@@ -27,15 +29,10 @@ function ToastProvider({
     setToasts(filtered)
   }
 
-  const clearAllToasts = () => {
-    setToasts([])
-  }
-
   const value = {
     toasts,
     addToast,
     dismissToast,
-    clearAllToasts
   }
 
   return (

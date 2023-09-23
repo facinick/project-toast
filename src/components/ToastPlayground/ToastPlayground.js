@@ -15,7 +15,7 @@ function ToastPlayground() {
   const [variant, setVariant] = useState(DEFAULT_VARIANT)
   const messageInputRef = useRef(null)
 
-  const { addToast, clearAllToasts } = useContext(ToastContext)
+  const { addToast } = useContext(ToastContext)
 
   const handleMessageInputChange = (event) => {
     const { value } = event.target
@@ -51,19 +51,6 @@ function ToastPlayground() {
     messageInputRef.current.focus()
   }, [])
 
-  useEffect(() => {
-
-    const onKeyDown = (event) => {
-      if(event.code === "Escape") {
-        clearAllToasts()
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown)
-
-    return () => window.removeEventListener("keydown", onKeyDown)
-
-  }, [])
 
   return (
     <div className={styles.wrapper}>
