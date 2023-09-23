@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Button from '../Button';
-import Toast from '../Toast';
+import ToastShelf from '../ToastShelf';
 import styles from './ToastPlayground.module.css';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
+const DEFAULT_MESSAGE = ""
+const DEFAULT_VARIANT = VARIANT_OPTIONS[0]
+
 function ToastPlayground() {
 
-  const [message, setMessage] = useState("")
-  const [variant, setVariant] = useState(VARIANT_OPTIONS[0])
+  const [message, setMessage] = useState(DEFAULT_MESSAGE)
+  const [variant, setVariant] = useState(DEFAULT_VARIANT)
   const messageInputRef = useRef(null)
-
-  const [visible, setVisible] = useState(false)
 
   const [toasts, setToasts] = useState([])
 
@@ -25,8 +26,33 @@ function ToastPlayground() {
     setVariant(value)
   }
 
-  const handleButtonClick = (event) => {
-    setVisible(true)
+  const handleFormSubmit = (event) => {
+    event.preventDefault()
+
+    const trimmedMessage = message.trim()
+
+    if(trimmedMessage === "") {
+      alert("Toast message cannot be empty!")
+      return
+    }
+
+    const nextToasts = [...toasts]
+    nextToasts.push({
+      variant,
+      message: trimmedMessage,
+      dismissMessage: "Dismiss Toast",
+      id: Math.random()
+    })
+    setToasts(nextToasts)
+
+    setMessage(DEFAULT_MESSAGE)
+    setVariant(DEFAULT_VARIANT)
+  }
+
+  const handleToastDismiss = (toastId) => {
+    const nextToasts = [...toasts]
+    const filtered = nextToasts.filter((toast) => toast.id !== toastId)
+    setToasts(filtered)
   }
 
   useEffect(() => {
@@ -39,8 +65,8 @@ function ToastPlayground() {
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-      {visible && <Toast onDismiss={() => setVisible(false)} dismissMessage={"Dismiss Toast"} variant={variant} message={message} />}
-      <div className={styles.controlsWrapper}>
+            
+      <form onSubmit={handleFormSubmit} className={styles.controlsWrapper}>
         {/* Message TextArea input */}
         <div className={styles.row}>
           <label
@@ -90,10 +116,12 @@ function ToastPlayground() {
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
-            <Button onClick={handleButtonClick}>Pop Toast!</Button>
+            <Button type="submit">Pop Toast!</Button>
           </div>
         </div>
-      </div>
+      </form>
+
+      <ToastShelf toasts={toasts} onDismiss={handleToastDismiss} />
     </div>
   );
 }
