@@ -27,10 +27,15 @@ function ToastProvider({
     setToasts(filtered)
   }
 
+  const clearAllToasts = () => {
+    setToasts([])
+  }
+
   const value = {
     toasts,
     addToast,
-    dismissToast
+    dismissToast,
+    clearAllToasts
   }
 
   return (

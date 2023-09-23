@@ -8,13 +8,12 @@ function ToastShelf() {
   const {toasts, dismissToast} = useContext(ToastContext)
 
   return (
-    <ol className={styles.wrapper}>
+    <ol aria-label='Notification' aria-live='polite' role="region" className={styles.wrapper}>
       {toasts.map((toast, index, array) => {
         return (
           <li key={toast.id} className={styles.toastWrapper}>
             <Toast
               onDismiss={() => dismissToast(toast.id)}
-              dismissMessage={"Dismiss Toast"}
               variant={toast.variant}
               message={toast.message}
             />

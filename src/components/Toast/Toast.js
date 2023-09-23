@@ -34,11 +34,11 @@ function Toast({
         <IconComponent size={24} />
       </div>
       <p className={styles.content}>
+        <VisuallyHidden>{`${variant} - `}</VisuallyHidden>
         {message}
       </p>
-      <button onClick={onDismiss} className={styles.closeButton}>
+      <button aria-live="off" aria-label="Dismiss message" onClick={onDismiss} className={styles.closeButton}>
         <X size={24} />
-        <VisuallyHidden>"Dismiss Toast"</VisuallyHidden>
       </button>
     </div>
   );
