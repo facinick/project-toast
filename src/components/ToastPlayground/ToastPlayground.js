@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import Button from '../Button';
-
+import Toast from '../Toast';
 import styles from './ToastPlayground.module.css';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
@@ -12,6 +11,10 @@ function ToastPlayground() {
   const [variant, setVariant] = useState(VARIANT_OPTIONS[0])
   const messageInputRef = useRef(null)
 
+  const [visible, setVisible] = useState(false)
+
+  const [toasts, setToasts] = useState([])
+
   const handleMessageInputChange = (event) => {
     const { value } = event.target
     setMessage(value)
@@ -20,6 +23,10 @@ function ToastPlayground() {
   const handleRadioInputChange = (event) => {
     const { value } = event.target
     setVariant(value)
+  }
+
+  const handleButtonClick = (event) => {
+    setVisible(true)
   }
 
   useEffect(() => {
@@ -32,8 +39,9 @@ function ToastPlayground() {
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-
+      {visible && <Toast onDismiss={() => setVisible(false)} dismissMessage={"Dismiss Toast"} variant={variant} message={message} />}
       <div className={styles.controlsWrapper}>
+        {/* Message TextArea input */}
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -46,7 +54,7 @@ function ToastPlayground() {
             <textarea ref={messageInputRef} value={message} onChange={handleMessageInputChange} id="message" className={styles.messageInput} />
           </div>
         </div>
-
+        {/* Variant Radio Input */}
         <div className={styles.row}>
           <div className={styles.label}>Variant</div>
           <div
@@ -76,13 +84,13 @@ function ToastPlayground() {
             }
           </div>
         </div>
-
+        {/* PopToast Button */}
         <div className={styles.row}>
           <div className={styles.label} />
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
-            <Button>Pop Toast!</Button>
+            <Button onClick={handleButtonClick}>Pop Toast!</Button>
           </div>
         </div>
       </div>

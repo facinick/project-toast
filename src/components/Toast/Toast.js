@@ -4,7 +4,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Info,
-  X,
+  X
 } from 'react-feather';
 
 import VisuallyHidden from '../VisuallyHidden';
@@ -18,18 +18,30 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast() {
+function Toast({
+  variant,
+  // message is only going to be a string, 
+  // so taking it via props and not children
+  message,
+  // Some toast may say Close Notification, some may say
+  // Close alert, so letting consumers decide
+  dismissMessage,
+  onDismiss,
+}) {
+
+  const IconComponent = ICONS_BY_VARIANT[variant]
+
   return (
-    <div className={`${styles.toast} ${styles.notice}`}>
+    <div className={`${styles.toast} ${styles[variant]}`}>
       <div className={styles.iconContainer}>
-        <Info size={24} />
+        <IconComponent size={24} />
       </div>
       <p className={styles.content}>
-        16 photos have been uploaded
+        {message}
       </p>
-      <button className={styles.closeButton}>
+      <button onClick={onDismiss} className={styles.closeButton}>
         <X size={24} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
+        <VisuallyHidden>{dismissMessage}</VisuallyHidden>
       </button>
     </div>
   );
