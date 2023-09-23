@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Button from '../Button';
+import { ToastContext } from '../ToastProvider/ToastProvider';
 import ToastShelf from '../ToastShelf';
 import styles from './ToastPlayground.module.css';
 
@@ -14,7 +15,7 @@ function ToastPlayground() {
   const [variant, setVariant] = useState(DEFAULT_VARIANT)
   const messageInputRef = useRef(null)
 
-  const [toasts, setToasts] = useState([])
+  const { addToast } = useContext(ToastContext)
 
   const handleMessageInputChange = (event) => {
     const { value } = event.target
@@ -31,28 +32,19 @@ function ToastPlayground() {
 
     const trimmedMessage = message.trim()
 
-    if(trimmedMessage === "") {
+    if (trimmedMessage === "") {
       alert("Toast message cannot be empty!")
       return
     }
 
-    const nextToasts = [...toasts]
-    nextToasts.push({
+    addToast({
       variant,
       message: trimmedMessage,
-      dismissMessage: "Dismiss Toast",
-      id: Math.random()
+      id: Math.random(),
     })
-    setToasts(nextToasts)
 
     setMessage(DEFAULT_MESSAGE)
     setVariant(DEFAULT_VARIANT)
-  }
-
-  const handleToastDismiss = (toastId) => {
-    const nextToasts = [...toasts]
-    const filtered = nextToasts.filter((toast) => toast.id !== toastId)
-    setToasts(filtered)
   }
 
   useEffect(() => {
@@ -65,7 +57,7 @@ function ToastPlayground() {
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-            
+
       <form onSubmit={handleFormSubmit} className={styles.controlsWrapper}>
         {/* Message TextArea input */}
         <div className={styles.row}>
@@ -121,7 +113,7 @@ function ToastPlayground() {
         </div>
       </form>
 
-      <ToastShelf toasts={toasts} onDismiss={handleToastDismiss} />
+      <ToastShelf />
     </div>
   );
 }

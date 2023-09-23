@@ -23,9 +23,6 @@ function Toast({
   // message is only going to be a string, 
   // so taking it via props and not children
   message,
-  // Some toast may say Close Notification, some may say
-  // Close alert, so letting consumers decide
-  dismissMessage,
   onDismiss,
 }) {
 
@@ -41,7 +38,7 @@ function Toast({
       </p>
       <button onClick={onDismiss} className={styles.closeButton}>
         <X size={24} />
-        <VisuallyHidden>{dismissMessage}</VisuallyHidden>
+        <VisuallyHidden>"Dismiss Toast"</VisuallyHidden>
       </button>
     </div>
   );
