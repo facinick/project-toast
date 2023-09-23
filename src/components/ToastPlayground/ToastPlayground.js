@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Button from '../Button';
 
@@ -7,6 +7,25 @@ import styles from './ToastPlayground.module.css';
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
+
+  const [message, setMessage] = useState("")
+  const [variant, setVariant] = useState(VARIANT_OPTIONS[0])
+  const messageInputRef = useRef(null)
+
+  const handleMessageInputChange = (event) => {
+    const { value } = event.target
+    setMessage(value)
+  }
+
+  const handleRadioInputChange = (event) => {
+    const { value } = event.target
+    setVariant(value)
+  }
+
+  useEffect(() => {
+    messageInputRef.current.focus()
+  }, [])
+
   return (
     <div className={styles.wrapper}>
       <header>
@@ -24,7 +43,7 @@ function ToastPlayground() {
             Message
           </label>
           <div className={styles.inputWrapper}>
-            <textarea id="message" className={styles.messageInput} />
+            <textarea ref={messageInputRef} value={message} onChange={handleMessageInputChange} id="message" className={styles.messageInput} />
           </div>
         </div>
 
@@ -33,17 +52,28 @@ function ToastPlayground() {
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
-            <label htmlFor="variant-notice">
-              <input
-                id="variant-notice"
-                type="radio"
-                name="variant"
-                value="notice"
-              />
-              notice
-            </label>
+            {
+              VARIANT_OPTIONS.map((value, index, array) => {
 
-            {/* TODO Other Variant radio buttons here */}
+                const variantId = `variant-${value}`
+                const isSelected = variant === value
+
+                return (
+                  <label htmlFor={variantId} key={value}>
+                    <input
+                      id={variantId}
+                      type="radio"
+                      name="variant"
+                      value={value}
+                      data-checked={isSelected.toString()}
+                      checked={isSelected}
+                      onChange={handleRadioInputChange}
+                    />
+                    {value}
+                  </label>
+                )
+              })
+            }
           </div>
         </div>
 
