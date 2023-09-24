@@ -5,7 +5,9 @@ import styles from './ToastShelf.module.css';
 
 function ToastShelf() {
 
-  const {toasts, dismissToast} = useContext(ToastContext)
+  const {toasts} = useContext(ToastContext)
+
+  console.log(`toast shelf render`)
 
   return (
     <ol aria-label='Notification' aria-live='polite' role="region" className={styles.wrapper}>
@@ -13,7 +15,7 @@ function ToastShelf() {
         return (
           <li key={toast.id} className={styles.toastWrapper}>
             <Toast
-              onDismiss={() => dismissToast(toast.id)}
+              id={toast.id}
               variant={toast.variant}
               message={toast.message}
             />
