@@ -29,11 +29,11 @@ function ToastProvider({
     setToasts(filtered)
   }
 
-  const value = {
+  const value = React.useMemo(() => ({
     toasts,
     addToast,
     dismissToast,
-  }
+  }), [toasts])
 
   return (
     <ToastContext.Provider value={value}>

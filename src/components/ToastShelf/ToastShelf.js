@@ -24,4 +24,4 @@ function ToastShelf() {
   );
 }
 
-export default ToastShelf;
+export default React.memo(ToastShelf);

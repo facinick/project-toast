@@ -20,11 +20,11 @@ const ICONS_BY_VARIANT = {
 
 function Toast({
   variant,
-  // message is only going to be a string, 
-  // so taking it via props and not children
   message,
   onDismiss,
 }) {
+
+  console.log(`render toast`)
 
   const IconComponent = ICONS_BY_VARIANT[variant]
 
@@ -44,4 +44,4 @@ function Toast({
   );
 }
 
-export default Toast;
+export default React.memo(Toast);
