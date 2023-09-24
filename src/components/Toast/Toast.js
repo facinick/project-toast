@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   AlertOctagon,
   AlertTriangle,
@@ -7,6 +7,7 @@ import {
   X
 } from 'react-feather';
 
+import { ToastContext } from '../ToastProvider';
 import VisuallyHidden from '../VisuallyHidden';
 
 import styles from './Toast.module.css';
@@ -19,14 +20,16 @@ const ICONS_BY_VARIANT = {
 };
 
 function Toast({
+  id,
   variant,
-  // message is only going to be a string, 
-  // so taking it via props and not children
   message,
-  onDismiss,
 }) {
 
+  const { dismissToast } = useContext(ToastContext)
+
   const IconComponent = ICONS_BY_VARIANT[variant]
+
+  console.log(`toast render`)
 
   return (
     <div className={`${styles.toast} ${styles[variant]}`}>
@@ -37,11 +40,11 @@ function Toast({
         <VisuallyHidden>{`${variant} - `}</VisuallyHidden>
         {message}
       </p>
-      <button aria-live="off" aria-label="Dismiss message" onClick={onDismiss} className={styles.closeButton}>
+      <button aria-live="off" aria-label="Dismiss message" onClick={() => dismissToast(id)} className={styles.closeButton}>
         <X size={24} />
       </button>
     </div>
   );
 }
 
-export default Toast;
+export default React.memo(Toast);

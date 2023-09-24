@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import useEscapeKey from '../../hooks/useEscapeKey';
+import useKeyDown from '../../hooks/useKeyDown';
 
 export const ToastContext = createContext()
 
@@ -8,7 +8,12 @@ function ToastProvider({
 }) {
 
   const [toasts, setToasts] = useState([])
-  useEscapeKey(() => setToasts([]))
+  const memoisedClearToast = React.useCallback(() => setToasts([]), [])
+  
+  // because the callback passed will be recreated every time toasts change
+  // which will cause the useKeyDown hook to remove event listener and add a new one,
+  // which will have a performance cost
+  useKeyDown("Escape", memoisedClearToast)
 
   const addToast = (toast) => {
 
@@ -29,11 +34,11 @@ function ToastProvider({
     setToasts(filtered)
   }
 
-  const value = {
+  const value = React.useCallback({
     toasts,
     addToast,
     dismissToast,
-  }
+  }, [toasts])
 
   return (
     <ToastContext.Provider value={value}>
